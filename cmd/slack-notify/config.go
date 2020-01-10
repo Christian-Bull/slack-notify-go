@@ -14,6 +14,9 @@ type config struct {
 			URLUSERS   string `json:"url-users"`
 		} `json:"api"`
 		Streamers []string `json:"streamers"`
+		Settings  struct {
+			TIME string `json:"time"`
+		} `json:"settings"`
 	} `json:"twitch"`
 	Slack struct {
 		Webhook string `json:"webhook"`
