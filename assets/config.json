@@ -1,0 +1,11 @@
+{
+    "twitch": {
+        "api": {
+            "auth": "",
+            "url-streams": "",
+            "url-users": ""
+        },
+        "streamers": [
+        ]
+    }
+}
