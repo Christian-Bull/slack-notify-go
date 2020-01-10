@@ -6,7 +6,7 @@ import (
 
 func main() {
 	// loads config file into config struct
-	c := loadConfig(`./assets/streamers.json`)
+	c := loadConfig(`../../assets/config.json`)
 
 	_, IDs := c.getIDs()
 	fmt.Println(IDs)
