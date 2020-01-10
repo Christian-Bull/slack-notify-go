@@ -15,6 +15,9 @@ type config struct {
 		} `json:"api"`
 		Streamers []string `json:"streamers"`
 	} `json:"twitch"`
+	Slack struct {
+		Webhook string `json:"webhook"`
+	} `json:"Slack"`
 }
 
 func loadConfig(file string) config {

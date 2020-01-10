@@ -1,3 +1,4 @@
 .gitignore
 assets/streamers.json
 assets/streamers.txt
+assets/config.json
