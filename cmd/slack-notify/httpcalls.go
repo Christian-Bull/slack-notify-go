@@ -25,7 +25,7 @@ func httpGet(url string, auth string) []byte {
 
 	defer resp.Body.Close()
 	respBody, _ := ioutil.ReadAll(resp.Body)
-	fmt.Println(resp.Status)
+	// fmt.Println(resp.Status)
 
 	return respBody
 }

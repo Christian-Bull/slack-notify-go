@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"os"
 )
 
@@ -23,16 +22,15 @@ type config struct {
 	} `json:"Slack"`
 }
 
-func loadConfig(file string) config {
+func loadConfig(file string) (config, error) {
 	var c config
 
 	configFile, err := os.Open(file)
+
 	defer configFile.Close()
-	if err != nil {
-		fmt.Println(err.Error())
-	}
+
 	configJSON := json.NewDecoder(configFile)
 	configJSON.Decode(&c)
-	return c
+	return c, err
 
 }
