@@ -23,24 +23,56 @@ func main() {
 		logger.Printf("error loading config: %v", err)
 	}
 
-	twitch(c)
+	// gets twitch data
+	_, IDs, s, o := twitch(c)
+	logger.Print(IDs)
+	logger.Print(o)
 
+	// finds live streams and posts msgs
+	live := twitchLive(c, s)
+	if live != nil {
+		slackPost(c, live)
+	}
 }
 
-func twitch(c config) {
-	_, IDs := c.getIDs()
+// channel struct, IDs, livedata, offline streams
+func twitch(c config) (channelName, []string, []streamData, []offline) {
+	channelData, IDs := c.getIDs()
 
-	streamData, _ := c.getStreamData(IDs)
+	streamData, offline := c.getStreamData(IDs)
 
-	for i := 0; i < len(streamData); i++ {
+	return channelData, IDs, streamData, offline // for other uses
+}
+
+func twitchLive(c config, s []streamData) []streamData {
+	var channels []streamData
+
+	// only for online channels
+	for i := 0; i < len(s); i++ {
 		now := time.Now().UTC()
 		x, _ := time.ParseDuration(c.Twitch.Settings.TIME)
 		nowminus := now.Add(-x)
 
-		if nowminus.After(streamData[i].Stream.CreatedAt) {
-			fmt.Println(streamData[i].Stream.CreatedAt)
+		if s[i].Stream.CreatedAt.After(nowminus) {
+			channels = append(channels, s[i])
 		} else {
-			fmt.Println("Not After")
+			fmt.Println(s[i].Stream.Channel.Name, s[i].Stream.CreatedAt)
 		}
+	}
+	return channels // returns live users
+}
+
+func slackPost(c config, s []streamData) {
+	// url := c.Slack.Webhook
+
+	for i := 0; i < len(s); i++ {
+		name := s[i].Stream.Channel.Name
+		game := s[i].Stream.Game
+		status := s[i].Stream.Channel.Status
+		link := s[i].Stream.Channel.URL
+
+		msg := fmt.Sprintf("%s is now live! Game: %s\n%s\n%s", name, game, status, link)
+		//postMsg(url, msg)
+		fmt.Println(msg)
 	}
 }
