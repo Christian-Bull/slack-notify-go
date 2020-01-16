@@ -18,7 +18,7 @@ func main() {
 	logger.Print("Logging started")
 
 	// loads config file into config struct
-	c, err := loadConfig(`../../assets/streamers.json`)
+	c, err := loadConfig(`../../assets/config.json`)
 	if err != nil {
 		logger.Printf("error loading config: %v", err)
 	}
@@ -39,6 +39,7 @@ func main() {
 
 		// sleep for time in config
 		t, err := time.ParseDuration(c.Twitch.Settings.TIME)
+		logger.Print(t)
 		if err != nil {
 			logger.Panic(err)
 		} else {
