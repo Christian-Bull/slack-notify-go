@@ -23,15 +23,27 @@ func main() {
 		logger.Printf("error loading config: %v", err)
 	}
 
-	// gets twitch data
-	_, IDs, s, o := twitch(c)
-	logger.Print(IDs)
-	logger.Print(o)
+	// infinite loop
+	for {
+		// gets twitch data
+		logger.Print("Getting IDs")
+		_, IDs, s, o := twitch(c)
+		logger.Printf("Getting stream data for %s", IDs)
+		logger.Print(o)
 
-	// finds live streams and posts msgs
-	live := twitchLive(c, s)
-	if live != nil {
-		slackPost(c, live)
+		// finds live streams and posts msgs
+		live := twitchLive(c, s)
+		if live != nil {
+			slackPost(c, live)
+		}
+
+		// sleep for time in config
+		t, err := time.ParseDuration(c.Twitch.Settings.TIME)
+		if err != nil {
+			logger.Panic(err)
+		} else {
+			time.Sleep(t)
+		}
 	}
 }
 

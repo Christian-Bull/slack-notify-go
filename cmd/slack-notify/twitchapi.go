@@ -103,7 +103,6 @@ func streamToStruct(j string) streamData {
 
 	err := json.Unmarshal([]byte(j), &streamJSON)
 	if err != nil {
-		fmt.Print("ree2")
 		fmt.Println(err)
 	}
 	return streamJSON
