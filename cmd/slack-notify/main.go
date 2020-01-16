@@ -18,7 +18,7 @@ func main() {
 	logger.Print("Logging started")
 
 	// loads config file into config struct
-	c, err := loadConfig(`../../assets/config.json`)
+	c, err := loadConfig(`assets/config.json`)
 	if err != nil {
 		logger.Printf("error loading config: %v", err)
 	}
