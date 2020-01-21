@@ -20,3 +20,10 @@ spec:
         image: csbull55/slack-go:v1
         name: slack-go
         imagePullPolicy: Always
+        volumeMounts:
+          - name: slack-volume
+            mountPath: /assets/config.json
+      volumes:
+        - name: slack-volume
+          configMap:
+            name: slack-config

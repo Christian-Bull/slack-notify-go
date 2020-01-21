@@ -1,4 +1,5 @@
 #! /bin/bash
 # this creates the configmap used in the cluster
+# super simple so I didn't bother with yaml
 
-kube create configmap -n=cbull slack-config --from-file=assets/config.json
+kubectl create configmap -n=cbull slack-config --from-file=assets/config.json
