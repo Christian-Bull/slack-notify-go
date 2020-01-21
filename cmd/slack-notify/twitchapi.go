@@ -120,7 +120,7 @@ func (c config) getIDs() (channelName, []string) {
 	u := c.Twitch.Streamers
 
 	auth := c.Twitch.API.Auth
-	url := c.Twitch.API.URLUSERS
+	url := c.Twitch.API.URLUsers
 
 	channelStructs := channelToStruct(string(httpGet(url+strings.Join(u, ","), auth)))
 	var UserIds []string
@@ -132,7 +132,7 @@ func (c config) getIDs() (channelName, []string) {
 
 func (c config) getStreamData(u []string) ([]streamData, []offline) {
 	auth := c.Twitch.API.Auth
-	url := c.Twitch.API.URLSTREAMS
+	url := c.Twitch.API.URLStreams
 
 	var streamData []streamData
 	var offlineData []offline

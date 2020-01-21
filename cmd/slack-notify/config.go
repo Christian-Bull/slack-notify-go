@@ -9,17 +9,17 @@ type config struct {
 	Twitch struct {
 		API struct {
 			Auth       string `json:"auth"`
-			URLSTREAMS string `json:"url-streams"`
-			URLUSERS   string `json:"url-users"`
+			URLStreams string `json:"url-streams"`
+			URLUsers   string `json:"url-users"`
 		} `json:"api"`
 		Streamers []string `json:"streamers"`
 		Settings  struct {
-			TIME string `json:"time"`
+			Time string `json:"time"`
 		} `json:"settings"`
+		Slack struct {
+			Webhook string `json:"webhook"`
+		} `json:"slack"`
 	} `json:"twitch"`
-	Slack struct {
-		Webhook string `json:"webhook"`
-	} `json:"Slack"`
 }
 
 func loadConfig(file string) (config, error) {
