@@ -5,13 +5,13 @@ FROM golang:latest
 RUN mkdir /app
 
 # adds everything to the dir
-ADD . /app
+ADD cmd /app
 
 # change working dir
 WORKDIR /app
 
 # builds app
-RUN go build -o main ./cmd/slack-notify/.
+RUN go build -o main ./slack-notify/.
 
 # run it yo
 CMD ["/app/main"]

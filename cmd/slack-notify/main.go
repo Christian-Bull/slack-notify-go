@@ -21,6 +21,8 @@ func main() {
 	c, err := loadConfig(`assets/config.json`)
 	if err != nil {
 		logger.Printf("error loading config: %v", err)
+		logger.Printf("Exit")
+		os.Exit(1)
 	}
 
 	// infinite loop
