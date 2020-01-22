@@ -21,9 +21,9 @@ spec:
             name: slack-config
       containers:
       - env:
-        image: csbull55/slack-go:v1
+        image: csbull55/slack-go:v2
         name: slack-go
         imagePullPolicy: Always
         volumeMounts:
           - name: slack-volume
-            mountPath: /etc/slack-notify/config.json
+            mountPath: /etc/slack-notify
