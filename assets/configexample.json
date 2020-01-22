@@ -5,12 +5,13 @@
             "url-streams": "",
             "url-users": ""
         },
-        "streamers": [],
+        "streamers": [
+        ],
         "settings": {
             "time": ""
-        },
-        "slack": {
-            "webhook": ""
         }
+    },
+    "slack": {
+        "webhook": ""
     }
 }
