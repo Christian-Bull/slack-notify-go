@@ -16,10 +16,10 @@ type config struct {
 		Settings  struct {
 			Time string `json:"time"`
 		} `json:"settings"`
-		Slack struct {
-			Webhook string `json:"webhook"`
-		} `json:"slack"`
 	} `json:"twitch"`
+	Slack struct {
+		Webhook string `json:"webhook"`
+	} `json:"slack"`
 }
 
 func loadConfig(file string) (config, error) {
@@ -32,5 +32,4 @@ func loadConfig(file string) (config, error) {
 	configJSON := json.NewDecoder(configFile)
 	configJSON.Decode(&c)
 	return c, err
-
 }

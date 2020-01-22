@@ -19,15 +19,15 @@ func main() {
 	logger.Print("Logging started")
 
 	// loads config file into config struct
-	c, err := loadConfig(`assets/config.json`)
+	c, err := loadConfig(`/etc/slack-notify/config.json`)
 	if err != nil {
 		logger.Printf("error loading config: %v", err)
 		logger.Printf("Exit")
 		os.Exit(1)
 	}
 
-	logger.Printf(c.Twitch.Slack.Webhook)
-	_ = postMsg(c.Twitch.Slack.Webhook, "Connected")
+	logger.Printf(c.Slack.Webhook)
+	_ = postMsg(c.Slack.Webhook, "Connected")
 
 	// infinite loop
 	for {
@@ -90,7 +90,7 @@ func slackPost(c config, s []streamData) {
 		status := s[i].Stream.Channel.Status
 		link := s[i].Stream.Channel.URL
 
-		msg := fmt.Sprintf("%s is now live! Game: %s\n%s\n%s", name, game, status, link)
-		_ = postMsg(c.Twitch.Slack.Webhook, msg)
+		msg := fmt.Sprintf("%s is now live! Game: %s\n`%s`\n%s", name, game, status, link)
+		_ = postMsg(c.Slack.Webhook, msg)
 	}
 }

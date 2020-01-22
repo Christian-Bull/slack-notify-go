@@ -15,6 +15,10 @@ spec:
       labels:
         app: slack-go
     spec:
+      volumes:
+        - name: slack-volume
+          configMap:
+            name: slack-config
       containers:
       - env:
         image: csbull55/slack-go:v1
@@ -22,8 +26,4 @@ spec:
         imagePullPolicy: Always
         volumeMounts:
           - name: slack-volume
-            mountPath: /assets/config.json
-      volumes:
-        - name: slack-volume
-          configMap:
-            name: slack-config
+            mountPath: /etc/slack-notify/config.json
