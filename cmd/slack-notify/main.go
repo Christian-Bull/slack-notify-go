@@ -27,7 +27,8 @@ func main() {
 	}
 
 	logger.Printf(c.Slack.Webhook)
-	_ = postMsg(c.Slack.Webhook, "Connected")
+	slackstatus := postMsg(c.Slack.Webhook, "Connected")
+	logger.Printf("Slack connection: %s", slackstatus)
 
 	// infinite loop
 	for {
@@ -42,6 +43,7 @@ func main() {
 		live := twitchLive(c, s)
 		if live != nil {
 			slackPost(c, live)
+
 		}
 
 		// sleep for time in config
@@ -67,6 +69,7 @@ func twitch(c config) (channelName, []string, []streamData, []offline) {
 func twitchLive(c config, s []streamData) []streamData {
 	var channels []streamData
 
+	log.Printf("Live streams:")
 	// only for online channels
 	for i := 0; i < len(s); i++ {
 		now := time.Now().UTC()
@@ -93,5 +96,6 @@ func slackPost(c config, s []streamData) {
 
 		msg := fmt.Sprintf("%s is now live! Game: %s\n`%s`\n%s", name, game, status, link)
 		_ = postMsg(c.Slack.Webhook, msg)
+		log.Printf(msg)
 	}
 }
