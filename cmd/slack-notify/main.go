@@ -33,9 +33,10 @@ func main() {
 	for {
 		// gets twitch data
 		logger.Print("Getting IDs")
-		_, IDs, s, o := twitch(c)
-		logger.Printf("Getting stream data for %s", IDs)
-		logger.Print(o)
+		ch, _, s, _ := twitch(c)
+		for i := 0; i < ch.Total; i++ {
+			logger.Printf("Getting stream data for %s", ch.Users[i].Name)
+		}
 
 		// finds live streams and posts msgs
 		live := twitchLive(c, s)
@@ -45,7 +46,7 @@ func main() {
 
 		// sleep for time in config
 		t, err := time.ParseDuration(c.Twitch.Settings.Time)
-		logger.Print(t)
+		logger.Printf("Waiting %s before next http call", t)
 		if err != nil {
 			logger.Panic(err)
 		} else {

@@ -20,6 +20,10 @@ type config struct {
 	Slack struct {
 		Webhook string `json:"webhook"`
 	} `json:"slack"`
+	Darksky struct {
+		Secret string `json:"secret"`
+		URL    string `json:"url"`
+	} `json:"darksky"`
 }
 
 func loadConfig(file string) (config, error) {

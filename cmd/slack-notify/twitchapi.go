@@ -91,7 +91,6 @@ func channelToStruct(j string) channelName {
 
 	err := json.Unmarshal([]byte(j), &channelJSON)
 	if err != nil {
-		fmt.Println("ree")
 		fmt.Println(err)
 	}
 
