@@ -1,11 +1,11 @@
 package main
 
 import (
-	"bytes"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
+
+	"github.com/slack-go/slack"
 )
 
 // GET request, takes url with parameters set
@@ -31,17 +31,28 @@ func httpGet(url string, auth string) []byte {
 }
 
 // takes (webhook, msg) and makes a post http req
-func postMsg(webhook string, msg string) string {
-	body := fmt.Sprintf(`{"text":"%s"}`, msg)
+// func postMsg(webhook string, msg string) string {
+// 	body := fmt.Sprintf(`{"text":"%s"}`, msg)
 
-	req, err := http.NewRequest("POST", webhook, bytes.NewBuffer([]byte(body)))
+// 	req, err := http.NewRequest("POST", webhook, bytes.NewBuffer([]byte(body)))
 
-	client := &http.Client{}
-	resp, err := client.Do(req)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer resp.Body.Close()
+// 	client := &http.Client{}
+// 	resp, err := client.Do(req)
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+// 	defer resp.Body.Close()
 
-	return resp.Status
+// 	return resp.Status
+// }
+
+func postMsg(auth string, channel string, msg string) (string, error) {
+	api := slack.New(auth)
+
+	msgID, _, _, err := api.SendMessage(
+		channel,
+		slack.MsgOptionText(msg, false),
+	)
+
+	return msgID, err
 }

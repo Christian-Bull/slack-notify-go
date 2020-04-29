@@ -116,7 +116,11 @@ func offlineToStruct(j string) (offline, error) {
 }
 
 func (c config) getIDs() (channelName, []string) {
-	u := c.Twitch.Streamers
+	// puts streamers into a list, ugh this is a hotifx
+	var u []string
+	for i := 0; i < len(c.Twitch.Streamers); i++ {
+		u = append(u, c.Twitch.Streamers[i].Name)
+	}
 
 	auth := c.Twitch.API.Auth
 	url := c.Twitch.API.URLUsers

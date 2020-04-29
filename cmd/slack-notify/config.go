@@ -12,18 +12,20 @@ type config struct {
 			URLStreams string `json:"url-streams"`
 			URLUsers   string `json:"url-users"`
 		} `json:"api"`
-		Streamers []string `json:"streamers"`
-		Settings  struct {
+		Streamers []struct {
+			Name    string `json:"name"`
+			Channel string `json:"channel"`
+		} `json:"streamers"`
+		Settings struct {
 			Time string `json:"time"`
 		} `json:"settings"`
 	} `json:"twitch"`
 	Slack struct {
-		Webhook string `json:"webhook"`
+		Webhook     string `json:"webhook"`
+		Auth        string `json:"auth"`
+		Log         string `json:"log"`
+		Postchannel string `json:"postchannel"`
 	} `json:"slack"`
-	Darksky struct {
-		Secret string `json:"secret"`
-		URL    string `json:"url"`
-	} `json:"darksky"`
 }
 
 func loadConfig(file string) (config, error) {
@@ -37,3 +39,7 @@ func loadConfig(file string) (config, error) {
 	configJSON.Decode(&c)
 	return c, err
 }
+
+// func getChannel(c config, streamName string) string {
+
+// }

@@ -27,7 +27,8 @@ func main() {
 	}
 
 	logger.Printf(c.Slack.Webhook)
-	slackstatus := postMsg(c.Slack.Webhook, "Connected")
+	slackstatus, err := postMsg(c.Slack.Auth, c.Slack.Log, "Connected")
+	log.Println(err)
 	logger.Printf("Slack connection: %s", slackstatus)
 
 	// infinite loop
@@ -94,8 +95,12 @@ func slackPost(c config, s []streamData) {
 		status := s[i].Stream.Channel.Status
 		link := s[i].Stream.Channel.URL
 
+		channel := c.Slack.Postchannel
 		msg := fmt.Sprintf("%s is now live! Game: %s\n`%s`\n%s", name, game, status, link)
-		_ = postMsg(c.Slack.Webhook, msg)
-		log.Printf(msg)
+		status, err := postMsg(c.Slack.Auth, channel, msg)
+		if err != nil {
+			fmt.Println(err)
+		}
+		log.Printf(status)
 	}
 }
