@@ -23,7 +23,7 @@ build the image
 
 run it
 
-    docker run -d <sometagname>
+    docker run -v /etc/slack-notify:/etc/slack-notify -d <sometagname>
 
 ## Kubernetes:
 
