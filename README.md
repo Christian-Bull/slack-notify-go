@@ -1,29 +1,61 @@
 # Slack Notify Go
 
-This is a pretty simple app to post custom notifications to slack channels. As of now, this only pulls info from the twitch api. Notifying a slack channel when a user goes live. 
+This is a pretty simple app to post custom notifications to slack channels. As of now, this only pulls info from the twitch api. Notifying a slack channel when a user goes live. I've included some simple build instructions that I used to get this running on a k8s cluster.
 
 
-### Info
+# Info
 
 Put your config into `/etc/slack-notify/config.json` using the structure in the config example.
 
+Manifests are located in the ./manifests directory
 
-## Contents:
+# Build/deploy info:
 
-### `main.go`
+## Clone Repo
 
-Infinte loop that pings the slack api and determines if a user is live by using the `CreatedAt` field.
+`git clone https://github.com/Christian-Bull/slack-notify-go.git`
 
+## Docker:
 
-### `config.go`
+build the image
 
-Self explanatory, code to load in and parse the config file.
+    docker build --tag <sometagname> . 
 
+run it
 
-### `httpcalls.go`
+    docker run -d <sometagname>
 
-Contains code for making a GET request on the twitch api and a POST request on the slack webhook. This should become a more robust package, but for now it's only a few lines of code and isn't difficult to re-use throughout the app.
+## Kubernetes:
 
-### `twitchapi.go`
+Set up the image on a registry (I used dockerhub)
 
-Parses the returned data from the twitch api and loads it into structs for use in other parts of the app.
+I just retagged my image after the fact
+
+    docker tag [image id] [registry:tag]                    # format
+    docker tag 8922d588eec6 csbull55/slack-notify:initial   # what I did
+
+Create namespace and deployment info
+
+    kubectl create -f manifests/*
+
+Inside the deployment, change the image (line 24) to your own registry link
+
+You could also apply each manifest separately
+
+    kubectl apply -f manifests/cbull-namespace.yaml
+    kubectl apply -f manifests/slack-go-deploy.yaml
+
+This should return
+
+    pod/slack-notify created
+
+Lets see if it's running 
+
+    kubectl get pod slack-notify
+
+    NAME           READY   STATUS    RESTARTS   AGE
+    slack-notify   1/1     Running   0          49m
+
+When you mess up the initial deployment (definitely _not_ speaking from experience), k8s makes it super easy to clean up your mess.
+
+    kubectl delete pod [name]
