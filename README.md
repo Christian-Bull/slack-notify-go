@@ -47,14 +47,14 @@ You could also apply each manifest separately
 
 This should return
 
-    pod/slack-notify created
+    pod/slack-go created
 
 Lets see if it's running 
 
-    kubectl get pod slack-notify
+    kubectl get pod slack-go
 
     NAME           READY   STATUS    RESTARTS   AGE
-    slack-notify   1/1     Running   0          49m
+    slack-go       1/1     Running   0          49m
 
 When you mess up the initial deployment (definitely _not_ speaking from experience), k8s makes it super easy to clean up your mess.
 
