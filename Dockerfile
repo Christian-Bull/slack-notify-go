@@ -1,23 +1,26 @@
 # gets latest golang image
-FROM golang:alpine
+FROM golang:alpine AS builder
 
-# install git
-RUN apk update && apk add git
+# needed for go modules
+ENV GO111MODULE=on
+# ENV CGO_ENABLED=0 # not sure what this does yet
 
-# creates app dir
-RUN mkdir /app
-
-# adds everything to the dir
-ADD cmd /app
+# # sets env vars for host
+ARG TARGETOS
+ARG TARGETARCH
 
 # change working dir
-WORKDIR /app
+WORKDIR /bin/app
 
-# gets go pkgs - need to update to go modules
-RUN go get -u github.com/slack-go/slack
+# adds everything to the dir
+ADD cmd /bin/app
+ADD go.sum /bin/app
+ADD go.mod /bin/app
 
+# gets go modules
+RUN go mod download
 # builds app
-RUN go build -o main ./slack-notify/.
+RUN GOARCH=$TARGETARCH GOOS=$TARGETOS go build -o main ./slack-notify/.
 
 # run it yo
-CMD ["/app/main"]
+CMD ["/bin/app/main"]
