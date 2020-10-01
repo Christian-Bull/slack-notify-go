@@ -18,6 +18,7 @@ ADD go.sum /bin/app
 ADD go.mod /bin/app
 
 # gets go modules
+RUN go mod tidy -v
 RUN go mod download
 # builds app
 RUN GOARCH=$TARGETARCH GOOS=$TARGETOS go build -o main ./slack-notify/.
