@@ -27,6 +27,11 @@ run it
 
     docker run -v /etc/slack-notify:/etc/slack-notify -d <sometagname>
 
+You can also build this for multi-arch using buildx
+    
+    docker buildx build --platform linux/arm64,linux/amd64 -t <sometagname> .
+
+
 ## Kubernetes:
 
 Set up the image on a registry (I used dockerhub)
