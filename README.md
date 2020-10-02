@@ -31,6 +31,7 @@ You can also build this for multi-arch using buildx
     
     docker buildx build --platform linux/arm64,linux/amd64 -t <sometagname> .
 
+This is a pretty comprehensive guide to setting up and building golang docker images with buildx https://medium.com/@artur.klauser/building-multi-architecture-docker-images-with-buildx-27d80f7e2408
 
 ## Kubernetes:
 
