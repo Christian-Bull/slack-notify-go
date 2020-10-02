@@ -1,3 +1,5 @@
+[![Go Report Card](https://goreportcard.com/badge/github.com/Christian-Bull/slack-notify-go)](https://goreportcard.com/report/github.com/Christian-Bull/slack-notify-go)
+
 # Slack Notify Go
 
 This is a pretty simple app to post custom notifications to slack channels. As of now, this only pulls info from the twitch api. Notifying a slack channel when a user goes live. I've included some simple build instructions that I used to get this running on a k8s cluster.
