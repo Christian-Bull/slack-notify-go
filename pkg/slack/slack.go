@@ -2,6 +2,7 @@ package slack
 
 import "fmt"
 
-func slack() {
+// Hello says hi!
+func Hello() {
 	fmt.Println("slack")
 }
