@@ -1,0 +1,32 @@
+{
+    "twitch": {
+        "api": {
+            "auth": "",
+            "url-streams": "",
+            "url-users": ""
+        },
+        "streamers": [
+            {
+                "name": "",
+                "channel": ""
+            },
+            {
+                "name": "",
+                "channel": ""
+            },
+            {
+                "name": "",
+                "channel": ""
+            }
+        ],
+        "settings": {
+            "time": ""
+        }
+    },
+    "slack": {
+        "webhook": "",
+        "auth": "",
+        "log": "",
+        "postchannel": ""
+    }
+}

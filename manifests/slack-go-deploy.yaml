@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: cbull
+  name: slack-go
+  labels:
+    app: slack-go
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: slack-go
+  template:
+    metadata:
+      labels:
+        app: slack-go
+    spec:
+      volumes:
+        - name: slack-volume
+          configMap:
+            name: slack-config
+      containers:
+      - env:
+        image: csbull55/slack-go:v2
+        name: slack-go
+        imagePullPolicy: Always
+        volumeMounts:
+          - name: slack-volume
+            mountPath: /etc/slack-notify
