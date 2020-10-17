@@ -25,26 +25,11 @@ func httpGet(url string, auth string) []byte {
 
 	defer resp.Body.Close()
 	respBody, _ := ioutil.ReadAll(resp.Body)
-	// fmt.Println(resp.Status)
+	fmt.Println(resp.Status)
+	fmt.Println(respBody)
 
 	return respBody
 }
-
-// takes (webhook, msg) and makes a post http req
-// func postMsg(webhook string, msg string) string {
-// 	body := fmt.Sprintf(`{"text":"%s"}`, msg)
-
-// 	req, err := http.NewRequest("POST", webhook, bytes.NewBuffer([]byte(body)))
-
-// 	client := &http.Client{}
-// 	resp, err := client.Do(req)
-// 	if err != nil {
-// 		log.Fatal(err)
-// 	}
-// 	defer resp.Body.Close()
-
-// 	return resp.Status
-// }
 
 func postMsg(auth string, channel string, msg string) (string, error) {
 	api := slack.New(auth)

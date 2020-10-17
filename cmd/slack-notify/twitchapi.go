@@ -126,6 +126,10 @@ func (c config) getIDs() (channelName, []string) {
 	url := c.Twitch.API.URLUsers
 
 	channelStructs := channelToStruct(string(httpGet(url+strings.Join(u, ","), auth)))
+	if channelStructs.Total == 0 {
+		fmt.Println("No IDs found")
+		os.Exit(1)
+	}
 	var UserIds []string
 	for i := 0; i < channelStructs.Total; i++ {
 		UserIds = append(UserIds, channelStructs.Users[i].ID)
@@ -148,17 +152,16 @@ func (c config) getStreamData(u []string) ([]streamData, []offline) {
 		if off.Stream != "" || err != nil {
 			item := streamToStruct(resp)
 			streamData = append(streamData, item)
+			fmt.Println("User: %s is live", item.Stream.Channel.Name)
 		} else {
 			offlineData = append(offlineData, off)
+			fmt.Println("user is offline")
 		}
 	}
+
 	return streamData, offlineData
 }
 
 func (s streamData) print() {
 	fmt.Printf("%+v", s)
 }
-
-// func (s streamData) isLive() bool {
-
-// }
