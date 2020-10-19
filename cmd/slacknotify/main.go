@@ -23,4 +23,10 @@ func main() {
 		}
 	}()
 
+	testMsg := createMessage("This is a test", "useful_bots")
+	m <- testMsg
+
+	for {
+		// run program
+	}
 }

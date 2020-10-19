@@ -44,3 +44,11 @@ func postMessage(c config, l *log.Logger, m Message) error {
 	}
 	return err
 }
+
+func createMessage(message string, channel string) Message {
+	return Message{
+		message: message,
+		channel: channel,
+		status:  "",
+	}
+}
