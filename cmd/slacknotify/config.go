@@ -8,9 +8,9 @@ import (
 type config struct {
 	Twitch struct {
 		API struct {
-			Auth       string `json:"auth"`
-			URLStreams string `json:"url-streams"`
-			URLUsers   string `json:"url-users"`
+			ClientID     string `json:"client_id"`
+			ClientSecret string `json:"client_secret"`
+			OAuthURL     string `json:"OAuthURL"`
 		} `json:"api"`
 		Streamers []struct {
 			Name    string `json:"name"`
@@ -26,6 +26,10 @@ type config struct {
 		Log         string `json:"log"`
 		Postchannel string `json:"postchannel"`
 	} `json:"slack"`
+	Darksky struct {
+		Secret string `json:"secret"`
+		URL    string `json:"url"`
+	} `json:"darksky"`
 }
 
 func loadConfig(file string) (config, error) {
