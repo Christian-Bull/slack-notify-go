@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 )
@@ -19,6 +20,6 @@ func main() {
 
 	// gets auth bearer token for twitch
 	auth := gettoken(c, l)
-
-	printUsers(c, l, auth)
+	t := getStreamInfo(c, l, auth)
+	fmt.Println(t)
 }

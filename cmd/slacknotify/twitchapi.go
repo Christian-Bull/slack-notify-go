@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"strings"
+	"time"
 )
 
 // headers applied to an http request
@@ -50,6 +51,25 @@ type twitchUserData struct {
 		OfflineImageURL string `json:"offline_image_url"`
 		ViewCount       int    `json:"view_count"`
 	} `json:"data"`
+}
+
+// stream infomation struct
+type livestreamers struct {
+	Data []struct {
+		ID           string    `json:"id"`
+		UserID       string    `json:"user_id"`
+		UserName     string    `json:"user_name"`
+		GameID       string    `json:"game_id"`
+		Type         string    `json:"type"`
+		Title        string    `json:"title"`
+		ViewerCount  int       `json:"viewer_count"`
+		StartedAt    time.Time `json:"started_at"`
+		Language     string    `json:"language"`
+		ThumbnailURL string    `json:"thumbnail_url"`
+		TagIds       []string  `json:"tag_ids"`
+	} `json:"data"`
+	Pagination struct {
+	} `json:"pagination"`
 }
 
 // this is the base request for calls to the twitch api
@@ -167,4 +187,45 @@ func getUserIDs(c config, l *log.Logger, auth string) twitchUserData {
 		l.Println("Error: could not parse user resp", err)
 	}
 	return usersJSON
+}
+
+func getlivestreams(c config, l *log.Logger, streamers []streamer, auth string) livestreamers {
+	// gets info from streamers that are live
+	var params []parameter
+	for i := 0; i < len(streamers); i++ {
+		params = append(params, parameter{
+			key:   "user_id",
+			value: streamers[i].ID,
+		})
+	}
+
+	// request header
+	var requestHeaders = []header{
+		header{
+			key:   "Client-ID",
+			value: c.Twitch.API.ClientID,
+		},
+		header{
+			key:   "Authorization",
+			value: fmt.Sprintf("Bearer %s", auth),
+		},
+	}
+
+	// build the request
+	r := &twitchReq{
+		url:     c.Twitch.API.StreamInfoURL,
+		method:  "GET",
+		headers: requestHeaders,
+		params:  params,
+	}
+
+	response := r.twitchRequest(l)
+
+	var liveStreams livestreamers
+
+	err := json.Unmarshal(response, &liveStreams)
+	if err != nil {
+		l.Println("Error: could not parse streamer info", err)
+	}
+	return liveStreams
 }

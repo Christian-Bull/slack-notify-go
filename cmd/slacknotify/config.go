@@ -8,10 +8,11 @@ import (
 type config struct {
 	Twitch struct {
 		API struct {
-			ClientID     string `json:"client_id"`
-			ClientSecret string `json:"client_secret"`
-			OAuthURL     string `json:"OAuthURL"`
-			UserIDURL    string `json:"UserIDURL"`
+			ClientID      string `json:"client_id"`
+			ClientSecret  string `json:"client_secret"`
+			OAuthURL      string `json:"OAuthURL"`
+			UserIDURL     string `json:"UserIDURL"`
+			StreamInfoURL string `json:"StreamInfoURL"`
 		} `json:"api"`
 		Streamers []struct {
 			Name    string `json:"name"`
