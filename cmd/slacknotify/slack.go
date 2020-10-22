@@ -52,3 +52,13 @@ func createMessage(message string, channel string) Message {
 		status:  "",
 	}
 }
+
+func gatherMessages(c config, l *log.Logger) {
+	m := make(chan Message)
+	go func() {
+		err := sendMessages(c, l, m)
+		if err != nil {
+			l.Fatal(err)
+		}
+	}()
+}

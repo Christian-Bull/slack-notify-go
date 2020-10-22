@@ -15,13 +15,7 @@ func main() {
 	}
 
 	// sets up messages channel and goroutine to accept messages
-	m := make(chan Message)
-	go func() {
-		err := sendMessages(c, l, m)
-		if err != nil {
-			l.Fatal(err)
-		}
-	}()
+	gatherMessages(c, l)
 
 	// gets auth bearer token for twitch
 	auth := gettoken(c, l)
