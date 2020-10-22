@@ -11,6 +11,7 @@ type config struct {
 			ClientID     string `json:"client_id"`
 			ClientSecret string `json:"client_secret"`
 			OAuthURL     string `json:"OAuthURL"`
+			UserIDURL    string `json:"UserIDURL"`
 		} `json:"api"`
 		Streamers []struct {
 			Name    string `json:"name"`
@@ -26,10 +27,6 @@ type config struct {
 		Log         string `json:"log"`
 		Postchannel string `json:"postchannel"`
 	} `json:"slack"`
-	Darksky struct {
-		Secret string `json:"secret"`
-		URL    string `json:"url"`
-	} `json:"darksky"`
 }
 
 func loadConfig(file string) (config, error) {
@@ -42,4 +39,12 @@ func loadConfig(file string) (config, error) {
 	configJSON := json.NewDecoder(configFile)
 	configJSON.Decode(&c)
 	return c, err
+}
+
+func (c config) streamersToList() []string {
+	var streamers []string
+	for i := 0; i < len(c.Twitch.Streamers); i++ {
+		streamers = append(streamers, c.Twitch.Streamers[i].Name)
+	}
+	return streamers
 }

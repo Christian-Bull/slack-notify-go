@@ -23,4 +23,8 @@ func main() {
 		}
 	}()
 
+	// gets auth bearer token for twitch
+	auth := gettoken(c, l)
+
+	printUsers(c, l, auth)
 }
