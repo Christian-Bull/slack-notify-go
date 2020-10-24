@@ -21,5 +21,6 @@ func main() {
 	// gets auth bearer token for twitch
 	auth := gettoken(c, l)
 	t := getStreamInfo(c, l, auth)
-	fmt.Println(t)
+	d := determineStatus(c, l, t)
+	fmt.Println(d)
 }

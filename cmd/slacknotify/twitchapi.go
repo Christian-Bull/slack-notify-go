@@ -10,6 +10,8 @@ import (
 	"time"
 )
 
+var gameURL string = "https://api.twitch.tv/helix/games?"
+
 // headers applied to an http request
 type header struct {
 	key   string
@@ -227,4 +229,55 @@ func getlivestreams(c config, l *log.Logger, streamers []streamer, auth string) 
 		l.Println("Error: could not parse streamer info", err)
 	}
 	return liveStreams
+}
+
+// twitch api calls return gameid, we need to find the name
+type gameResponse struct {
+	Data []struct {
+		BoxArtURL string `json:"box_art_url"`
+		ID        string `json:"id"`
+		Name      string `json:"name"`
+	} `json:"data"`
+	Pagination struct {
+		Cursor string `json:"cursor"`
+	} `json:"pagination"`
+}
+
+func getGameName(c config, l *log.Logger, auth string, gameIDs []string) gameResponse {
+	var params []parameter
+	for i := 0; i < len(gameIDs); i++ {
+		params = append(params, parameter{
+			key:   "id",
+			value: gameIDs[i],
+		})
+	}
+
+	var requestHeaders = []header{
+		header{
+			key:   "Client-ID",
+			value: c.Twitch.API.ClientID,
+		},
+		header{
+			key:   "Authorization",
+			value: fmt.Sprintf("Bearer %s", auth),
+		},
+	}
+
+	// build the request
+	r := &twitchReq{
+		url:     gameURL,
+		method:  "GET",
+		headers: requestHeaders,
+		params:  params,
+	}
+
+	response := r.twitchRequest(l)
+
+	var gamesJSON gameResponse
+
+	err := json.Unmarshal(response, &gamesJSON)
+	if err != nil {
+		l.Println("Error: could not parse games response", err)
+	}
+	return gamesJSON
 }
