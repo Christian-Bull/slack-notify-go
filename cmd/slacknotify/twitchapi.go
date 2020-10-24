@@ -30,48 +30,6 @@ type twitchReq struct {
 	params  []parameter
 }
 
-// RESPONSE STRUCTS
-// the structs below represent the json responses for each method
-type twitchOAuthresp struct {
-	AccessToken string `json:"access_token"`
-	ExpiresIn   int    `json:"expires_in"`
-	TokenType   string `json:"token_type"`
-}
-
-// list of user data
-type twitchUserData struct {
-	Data []struct {
-		ID              string `json:"id"`
-		Login           string `json:"login"`
-		DisplayName     string `json:"display_name"`
-		Type            string `json:"type"`
-		BroadcasterType string `json:"broadcaster_type"`
-		Description     string `json:"description"`
-		ProfileImageURL string `json:"profile_image_url"`
-		OfflineImageURL string `json:"offline_image_url"`
-		ViewCount       int    `json:"view_count"`
-	} `json:"data"`
-}
-
-// stream infomation struct
-type livestreamers struct {
-	Data []struct {
-		ID           string    `json:"id"`
-		UserID       string    `json:"user_id"`
-		UserName     string    `json:"user_name"`
-		GameID       string    `json:"game_id"`
-		Type         string    `json:"type"`
-		Title        string    `json:"title"`
-		ViewerCount  int       `json:"viewer_count"`
-		StartedAt    time.Time `json:"started_at"`
-		Language     string    `json:"language"`
-		ThumbnailURL string    `json:"thumbnail_url"`
-		TagIds       []string  `json:"tag_ids"`
-	} `json:"data"`
-	Pagination struct {
-	} `json:"pagination"`
-}
-
 // this is the base request for calls to the twitch api
 func (t twitchReq) twitchRequest(l *log.Logger) []byte {
 	var url = t.url
@@ -115,6 +73,13 @@ func (t twitchReq) twitchRequest(l *log.Logger) []byte {
 	return respBody
 }
 
+// the structs below represent the json responses for each method
+type twitchOAuthresp struct {
+	AccessToken string `json:"access_token"`
+	ExpiresIn   int    `json:"expires_in"`
+	TokenType   string `json:"token_type"`
+}
+
 // gets auth token from twitch
 func gettoken(c config, l *log.Logger) string {
 	var params = []parameter{
@@ -146,6 +111,21 @@ func gettoken(c config, l *log.Logger) string {
 		l.Println("Error: could not parse token resp", err)
 	}
 	return oauthJSON.AccessToken
+}
+
+// list of user data
+type twitchUserData struct {
+	Data []struct {
+		ID              string `json:"id"`
+		Login           string `json:"login"`
+		DisplayName     string `json:"display_name"`
+		Type            string `json:"type"`
+		BroadcasterType string `json:"broadcaster_type"`
+		Description     string `json:"description"`
+		ProfileImageURL string `json:"profile_image_url"`
+		OfflineImageURL string `json:"offline_image_url"`
+		ViewCount       int    `json:"view_count"`
+	} `json:"data"`
 }
 
 func getUserIDs(c config, l *log.Logger, auth string) twitchUserData {
@@ -187,6 +167,25 @@ func getUserIDs(c config, l *log.Logger, auth string) twitchUserData {
 		l.Println("Error: could not parse user resp", err)
 	}
 	return usersJSON
+}
+
+// stream infomation struct
+type livestreamers struct {
+	Data []struct {
+		ID           string    `json:"id"`
+		UserID       string    `json:"user_id"`
+		UserName     string    `json:"user_name"`
+		GameID       string    `json:"game_id"`
+		Type         string    `json:"type"`
+		Title        string    `json:"title"`
+		ViewerCount  int       `json:"viewer_count"`
+		StartedAt    time.Time `json:"started_at"`
+		Language     string    `json:"language"`
+		ThumbnailURL string    `json:"thumbnail_url"`
+		TagIds       []string  `json:"tag_ids"`
+	} `json:"data"`
+	Pagination struct {
+	} `json:"pagination"`
 }
 
 func getlivestreams(c config, l *log.Logger, streamers []streamer, auth string) livestreamers {
