@@ -27,6 +27,7 @@ type config struct {
 		Auth        string `json:"auth"`
 		Log         string `json:"log"`
 		Postchannel string `json:"postchannel"`
+		Logchannel  string `json:"logchannel"`
 	} `json:"slack"`
 }
 

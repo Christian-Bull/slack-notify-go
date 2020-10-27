@@ -140,3 +140,13 @@ func findGameName(c config, l *log.Logger, auth string, gameIDs []string) games 
 	}
 	return games{games: g}
 }
+
+func (s *slackStreamInfoList) updateGameID(l *log.Logger, g games) {
+	for i := 0; i < len(s.list); i++ {
+		for j := 0; j < len(g.games); j++ {
+			if s.list[i].GameID == g.games[j].ID {
+				s.list[i].updateGame(g.games[j].Name)
+			}
+		}
+	}
+}

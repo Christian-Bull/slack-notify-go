@@ -54,6 +54,12 @@ func createMessage(message string, channel string) Message {
 }
 
 func gatherMessages(c config, l *log.Logger) {
+	// test our connection using the default post channel
+	err := postMessage(c, l, createMessage("Connected", c.Slack.Logchannel))
+	if err != nil {
+		l.Fatal("Couldn't send initial message", err)
+	}
+
 	m := make(chan Message)
 	go func() {
 		err := sendMessages(c, l, m)
