@@ -64,6 +64,11 @@ func getStreamInfo(c config, l *log.Logger, auth string) livestreamers {
 	return getlivestreams(c, l, streamers, auth)
 }
 
+// returns streamer url
+func getStreamURL(s string) string {
+	return fmt.Sprintf("%s/%s", streamURL, s)
+}
+
 // this determines which streamers to send notifications for based on StartedAt
 func determineStatus(c config, l *log.Logger, streams livestreamers) slackStreamInfoList {
 	var liveStreams []slackStreamInfo
@@ -90,29 +95,29 @@ func determineStatus(c config, l *log.Logger, streams livestreamers) slackStream
 	return slackStreamers
 }
 
-// returns streamer url
-func getStreamURL(s string) string {
-	return fmt.Sprintf("%s/%s", streamURL, s)
-}
-
 // replace game id with name
 func (slack *slackStreamInfo) updateGame(n string) {
 	slack.GameID = n
 }
 
 // returns unique games
-func (s slackStreamInfoList) returnUniqueIDs(l *log.Logger) []string {
-	var returnList []string
-	for i := 0; i < len(s.list); i++ {
-		for j := range returnList {
-			if s.list[i].GameID == returnList[j] {
-				continue
-			} else {
-				returnList = append(returnList, s.list[i].GameID)
-			}
+func returnUniqueIDs(l *log.Logger, s slackStreamInfoList) []string {
+	// put our gameIDs in a list
+	var gameIDs []string
+	for j := 0; j < len(s.list); j++ {
+		gameIDs = append(gameIDs, s.list[j].GameID)
+	}
+
+	// check if they're unique, append if not
+	keys := make(map[string]bool)
+	list := []string{}
+	for _, i := range gameIDs {
+		if _, value := keys[i]; !value {
+			keys[i] = true
+			list = append(list, i)
 		}
 	}
-	return returnList
+	return list
 }
 
 type game struct {

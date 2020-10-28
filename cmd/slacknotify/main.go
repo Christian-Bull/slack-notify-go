@@ -6,6 +6,18 @@ import (
 	"os"
 )
 
+// example live stream info
+var example []slackStreamInfo = []slackStreamInfo{{
+	Name:   "b0aty",
+	Title:  "this is rubbish",
+	GameID: "459931",
+	Link:   "",
+}}
+
+var exampleList slackStreamInfoList = slackStreamInfoList{
+	list: example,
+}
+
 func main() {
 	l := log.New(os.Stdout, "slack-notify-go", log.LstdFlags)
 
@@ -24,4 +36,9 @@ func main() {
 	fmt.Println(t)
 	d := determineStatus(c, l, t)
 	fmt.Println(d)
+
+	uniqueIDs := returnUniqueIDs(l, exampleList)
+	fmt.Println(uniqueIDs)
+	games := findGameName(c, l, auth, uniqueIDs)
+	fmt.Println(games)
 }
