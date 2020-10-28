@@ -17,22 +17,15 @@ type streamer struct {
 
 // data needed for a message
 type slackStreamInfo struct {
-	Name   string
-	Title  string
-	GameID string // ugh idk why they return this as a string
-	Link   string
+	Name        string
+	Title       string
+	GameID      string // ugh idk why they return this as a string
+	Link        string
+	PostChannel string
 }
 
 type slackStreamInfoList struct {
 	list []slackStreamInfo
-}
-
-// useful for testing, keeping it for now
-func printUsers(c config, l *log.Logger, a string) {
-	t := getUserIDs(c, l, a)
-	for i := 0; i < len(t.Data); i++ {
-		fmt.Println(t.Data[i].Login, t.Data[i].ID)
-	}
 }
 
 // puts all the necessary info into a list of structs (id,name,slackchannel)
@@ -154,4 +147,54 @@ func (s *slackStreamInfoList) updateGameID(l *log.Logger, g games) {
 			}
 		}
 	}
+}
+
+func (slack *slackStreamInfo) updatePostchannel(c string) {
+	slack.PostChannel = c
+}
+
+// updates our livestream struct with post channel
+func (s *slackStreamInfoList) updatePostChannels(c config, l *log.Logger) {
+	for i := 0; i < len(s.list); i++ {
+		for _, j := range c.Twitch.Streamers {
+			if s.list[i].Name == j.Name {
+				s.list[i].updatePostchannel(j.Channel)
+			}
+		}
+	}
+}
+
+func (slack slackStreamInfo) formatMessage() string {
+	name := slack.Name
+	game := slack.GameID
+	title := slack.Title
+	link := slack.Link
+	return fmt.Sprintf("%s is now live! Game: %s\n`%s`\n%s", name, game, title, link)
+}
+
+func (s *slackStreamInfoList) sendNotifications(c config, l *log.Logger, m chan Message) {
+	for i := 0; i < len(s.list); i++ {
+		msg := createMessage(s.list[i].formatMessage(), s.list[i].PostChannel)
+		m <- msg
+	}
+}
+
+func runTwitchBot(c config, l *log.Logger, auth string, m chan Message) {
+	t := getStreamInfo(c, l, auth)
+	for i := 0; i < len(t.Data); i++ {
+		l.Printf("%s is live, started at %s", t.Data[i].UserName, t.Data[i].StartedAt.String())
+	}
+
+	d := determineStatus(c, l, t)
+
+	uniqueIDs := returnUniqueIDs(l, d)
+	games := findGameName(c, l, auth, uniqueIDs)
+	d.updateGameID(l, games)
+	d.updatePostChannels(c, l)
+	if d.list == nil {
+		l.Println("No new streams to post info for")
+	} else {
+		l.Println("Found the following streams to post a notification for", d.list)
+	}
+	d.sendNotifications(c, l, m)
 }

@@ -53,7 +53,7 @@ func createMessage(message string, channel string) Message {
 	}
 }
 
-func gatherMessages(c config, l *log.Logger) {
+func gatherMessages(c config, l *log.Logger) chan Message {
 	// test our connection using the default post channel
 	err := postMessage(c, l, createMessage("Connected", c.Slack.Logchannel))
 	if err != nil {
@@ -67,4 +67,5 @@ func gatherMessages(c config, l *log.Logger) {
 			l.Fatal(err)
 		}
 	}()
+	return m
 }
