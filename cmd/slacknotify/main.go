@@ -6,18 +6,6 @@ import (
 	"time"
 )
 
-// example live stream info
-var example []slackStreamInfo = []slackStreamInfo{{
-	Name:   "b0aty",
-	Title:  "this is rubbish",
-	GameID: "459931",
-	Link:   "https://www.twitch.tv/itswill",
-}}
-
-var exampleList slackStreamInfoList = slackStreamInfoList{
-	list: example,
-}
-
 func main() {
 	l := log.New(os.Stdout, "slack-notify-go", log.LstdFlags)
 
