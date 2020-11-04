@@ -33,7 +33,7 @@ This is a pretty comprehensive guide to setting up and building golang docker im
 
 ## Kubernetes:
 
-Set up the image on a registry (I used dockerhub)
+Set up the image on a registry (I used dockerhub) - if using buildx this is not needed since it's done when building the image
 
 I just retagged my image and pushed it after the fact
 
