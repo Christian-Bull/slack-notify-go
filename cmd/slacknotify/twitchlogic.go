@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"strings"
 	"time"
 )
 
@@ -81,6 +82,7 @@ func determineStatus(c config, l *log.Logger, streams livestreamers) slackStream
 			}
 			liveStreams = append(liveStreams, data)
 		}
+
 	}
 	var slackStreamers = slackStreamInfoList{
 		list: liveStreams,
@@ -157,7 +159,7 @@ func (slack *slackStreamInfo) updatePostchannel(c string) {
 func (s *slackStreamInfoList) updatePostChannels(c config, l *log.Logger) {
 	for i := 0; i < len(s.list); i++ {
 		for _, j := range c.Twitch.Streamers {
-			if s.list[i].Name == j.Name {
+			if strings.ToLower(s.list[i].Name) == strings.ToLower(j.Name) {
 				s.list[i].updatePostchannel(j.Channel)
 			}
 		}
