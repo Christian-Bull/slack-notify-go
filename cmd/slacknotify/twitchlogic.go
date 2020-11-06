@@ -69,9 +69,15 @@ func determineStatus(c config, l *log.Logger, streams livestreamers) slackStream
 
 	for i := 0; i < len(streams.Data); i++ {
 		now := time.Now().UTC()
-		x, _ := time.ParseDuration(c.Twitch.Settings.Time)
+		x, err := time.ParseDuration(c.Twitch.Settings.Time)
+		if err != nil {
+			l.Println("Error parsing time, defaulting to 5min")
+			x = time.Minute * 5
+		}
 		nowminus := now.Add(-x)
 
+		l.Printf("Checking stream: %s", streams.Data[i].UserName)
+		l.Printf("Time debug info: now = %s - startedAt = %s", nowminus, streams.Data[i].StartedAt)
 		// checks if started at time is after current time
 		if streams.Data[i].StartedAt.After(nowminus) {
 			data := slackStreamInfo{
@@ -81,6 +87,7 @@ func determineStatus(c config, l *log.Logger, streams livestreamers) slackStream
 				Link:   getStreamURL(streams.Data[i].UserName),
 			}
 			liveStreams = append(liveStreams, data)
+			l.Println("Adding stream to list to post updates for", streams.Data[i].UserName)
 		}
 
 	}
@@ -176,6 +183,7 @@ func (slack slackStreamInfo) formatMessage() string {
 
 func (s *slackStreamInfoList) sendNotifications(c config, l *log.Logger, m chan Message) {
 	for i := 0; i < len(s.list); i++ {
+		l.Printf("Sending %s notification to messages channel", s.list[i].Name)
 		msg := createMessage(s.list[i].formatMessage(), s.list[i].PostChannel)
 		m <- msg
 	}
@@ -189,14 +197,19 @@ func runTwitchBot(c config, l *log.Logger, auth string, m chan Message) {
 
 	d := determineStatus(c, l, t)
 
-	uniqueIDs := returnUniqueIDs(l, d)
-	games := findGameName(c, l, auth, uniqueIDs)
-	d.updateGameID(l, games)
-	d.updatePostChannels(c, l)
 	if d.list == nil {
 		l.Println("No new streams to post info for")
 	} else {
+		// find info about the game
+		uniqueIDs := returnUniqueIDs(l, d)
+		games := findGameName(c, l, auth, uniqueIDs)
+
+		// update the post structs with that info
+		d.updateGameID(l, games)
+		d.updatePostChannels(c, l)
+
 		l.Println("Found the following streams to post a notification for", d.list)
 	}
+	// send notifications
 	d.sendNotifications(c, l, m)
 }
