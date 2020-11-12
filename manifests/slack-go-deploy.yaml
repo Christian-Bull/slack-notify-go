@@ -23,7 +23,7 @@ spec:
       - env:
         - name: CONFIG_PATH
           value: "/etc/slack-notify/config.json"
-        image: csbull55/slack-go:v8
+        image: csbull55/slack-go:v9
         name: slack-go
         imagePullPolicy: IfNotPresent
         volumeMounts:

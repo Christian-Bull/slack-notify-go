@@ -183,8 +183,8 @@ func (slack slackStreamInfo) formatMessage() string {
 
 func (s *slackStreamInfoList) sendNotifications(c config, l *log.Logger, m chan Message) {
 	for i := 0; i < len(s.list); i++ {
-		l.Printf("Sending %s notification to messages channel", s.list[i].Name)
 		msg := createMessage(s.list[i].formatMessage(), s.list[i].PostChannel)
+		l.Println("Sending notification to messages channel: ", msg)
 		m <- msg
 	}
 }
