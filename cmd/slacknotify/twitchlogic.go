@@ -181,15 +181,18 @@ func (slack slackStreamInfo) formatMessage() string {
 	return fmt.Sprintf("%s is now live! Game: %s\n`%s`\n%s", name, game, title, link)
 }
 
-func (s *slackStreamInfoList) sendNotifications(c config, l *log.Logger, m chan Message) {
+func (s *slackStreamInfoList) sendNotifications(c config, l *log.Logger) {
 	for i := 0; i < len(s.list); i++ {
 		msg := createMessage(s.list[i].formatMessage(), s.list[i].PostChannel)
 		l.Println("Sending notification to messages channel: ", msg)
-		m <- msg
+		err := postMessage(c, l, msg)
+		if err != nil {
+			l.Println("Error posting message")
+		}
 	}
 }
 
-func runTwitchBot(c config, l *log.Logger, auth string, m chan Message) {
+func runTwitchBot(c config, l *log.Logger, auth string) {
 	t := getStreamInfo(c, l, auth)
 	for i := 0; i < len(t.Data); i++ {
 		l.Printf("%s is live, started at %s", t.Data[i].UserName, t.Data[i].StartedAt.String())
@@ -211,5 +214,5 @@ func runTwitchBot(c config, l *log.Logger, auth string, m chan Message) {
 		l.Println("Found the following streams to post a notification for", d.list)
 	}
 	// send notifications
-	d.sendNotifications(c, l, m)
+	d.sendNotifications(c, l)
 }

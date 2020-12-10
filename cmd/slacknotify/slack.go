@@ -13,11 +13,6 @@ type Message struct {
 	status  string
 }
 
-// gets messages from our m channel and submits a post request
-func sendMessages(c config, l *log.Logger, m chan Message) error {
-	return postMessage(c, l, <-m)
-}
-
 // Post a message to slack
 func postMessage(c config, l *log.Logger, m Message) error {
 	var (
@@ -51,21 +46,4 @@ func createMessage(message string, channel string) Message {
 		channel: channel,
 		status:  "",
 	}
-}
-
-func gatherMessages(c config, l *log.Logger) chan Message {
-	// test our connection using the default post channel
-	err := postMessage(c, l, createMessage("Connected", c.Slack.Logchannel))
-	if err != nil {
-		l.Fatal("Couldn't send initial message", err)
-	}
-
-	m := make(chan Message)
-	go func() {
-		err := sendMessages(c, l, m)
-		if err != nil {
-			l.Fatal(err)
-		}
-	}()
-	return m
 }

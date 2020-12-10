@@ -15,15 +15,18 @@ func main() {
 		l.Fatal("Error loading config", err)
 	}
 
-	// sets up our send message channel
-	m := gatherMessages(c, l)
-
 	// gets auth bearer token for twitch
 	auth := gettoken(c, l)
 
+	// test our connection using the default post channel
+	err = postMessage(c, l, createMessage("Connected", c.Slack.Logchannel))
+	if err != nil {
+		l.Fatal("Couldn't send initial message", err)
+	}
+
 	for {
 		// runs bot
-		runTwitchBot(c, l, auth, m)
+		go runTwitchBot(c, l, auth)
 
 		// sleep for time in config
 		sleepTime, err := time.ParseDuration(c.Twitch.Settings.Time)
