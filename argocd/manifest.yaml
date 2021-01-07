@@ -1,0 +1,10 @@
+project: default
+source:
+  repoURL: 'https://github.com/Christian-Bull/slack-notify-go'
+  path: manifests
+  targetRevision: HEAD
+destination:
+  server: 'https://kubernetes.default.svc'
+  namespace: cbull
+syncPolicy:
+  automated: {}

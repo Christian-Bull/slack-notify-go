@@ -56,3 +56,17 @@ Should be up and running, lets check
 NAME                       READY   STATUS    RESTARTS   AGE
 slack-go-ddf77c8d6-zjrb7   1/1     Running   0          8m1s
 ```
+
+### Argocd:
+```project: default
+source:
+  repoURL: 'https://github.com/Christian-Bull/slack-notify-go'
+  path: manifests
+  targetRevision: HEAD
+destination:
+  server: 'https://kubernetes.default.svc'
+  namespace: cbull
+syncPolicy:
+  automated: {}
+```
+7 lines of yaml and my CD is 
