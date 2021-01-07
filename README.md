@@ -69,4 +69,4 @@ destination:
 syncPolicy:
   automated: {}
 ```
-7 lines of yaml and my CD is 
+9 lines of yaml and my CD is setup. When I make changes to my manifests in my repo, argo automatically syncs that state with the cluster and redeploys. `syncPolicy: automated`
