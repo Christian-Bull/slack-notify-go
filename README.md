@@ -1,4 +1,5 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/Christian-Bull/slack-notify-go)](https://goreportcard.com/report/github.com/Christian-Bull/slack-notify-go)
+[![Actions Status](https://github.com/Christian-Bull/slack-notify-go/workflows/push/badge.svg)](https://github.com/Christian-Bull/slack-notify-go/actions)
 
 # Slack Notify Go
 
