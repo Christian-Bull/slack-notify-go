@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: cbull-service
+  namespace: cbull
+  labes:
+    app: slack-notify
+spec:
+  ports:
+  - port: 2113
+    protocol: TCP
+    targetPort: 2113 
+    name: web 
+  selector:
+    app: slack-notify
+  type: NodePort 
