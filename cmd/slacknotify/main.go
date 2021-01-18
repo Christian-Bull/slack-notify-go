@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -54,6 +53,6 @@ func main() {
 
 	err = http.ListenAndServe(":"+port, nil)
 	if err != nil {
-		fmt.Println(err)
+		l.Fatal("Failed to start prometheus metrics server")
 	}
 }
