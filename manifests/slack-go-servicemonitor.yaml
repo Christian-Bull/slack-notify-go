@@ -1,0 +1,14 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    app: slack-go
+  name: slack-go 
+  namespace: cbull
+spec:
+  selector:
+    matchLabels:
+      app: slack-go
+  endpoints:
+  - port: metrics
+    interval: 60s
