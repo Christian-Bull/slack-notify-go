@@ -1,9 +1,13 @@
 package main
 
 import (
+	"fmt"
 	"log"
+	"net/http"
 	"os"
 	"time"
+
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 func main() {
@@ -24,18 +28,32 @@ func main() {
 		l.Fatal("Couldn't send initial message", err)
 	}
 
-	for {
-		// runs bot
-		go runTwitchBot(c, l, auth)
+	go func() {
+		for {
+			// runs bot
+			runTwitchBot(c, l, auth)
 
-		// sleep for time in config
-		sleepTime, err := time.ParseDuration(c.Twitch.Settings.Time)
-		l.Printf("Waiting %s before next http call", sleepTime)
-		if err != nil {
-			l.Fatal("Couldn't parse sleep time", err)
-		} else {
-			time.Sleep(sleepTime)
+			// sleep for time in config
+			sleepTime, err := time.ParseDuration(c.Twitch.Settings.Time)
+			l.Printf("Waiting %s before next http call", sleepTime)
+			if err != nil {
+				l.Fatal("Couldn't parse sleep time", err)
+			} else {
+				time.Sleep(sleepTime)
+			}
 		}
+	}()
+
+	// basic prometheus metrics
+	http.Handle("/metrics", promhttp.Handler())
+
+	port := os.Getenv("LISTENING_PORT")
+	if port == "" {
+		port = "8080"
 	}
 
+	err = http.ListenAndServe(":"+port, nil)
+	if err != nil {
+		fmt.Println(err)
+	}
 }
