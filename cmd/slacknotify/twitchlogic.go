@@ -82,7 +82,7 @@ func determineStatus(c config, l *log.Logger, streams livestreamers) slackStream
 		if streams.Data[i].StartedAt.After(nowminus) {
 			data := slackStreamInfo{
 				Name:   streams.Data[i].UserName,
-				Title:  streams.Data[i].Title,
+				Title:  strings.TrimSpace(streams.Data[i].Title),
 				GameID: streams.Data[i].GameID,
 				Link:   getStreamURL(streams.Data[i].UserName),
 			}
